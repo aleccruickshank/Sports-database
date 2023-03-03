@@ -1,4 +1,4 @@
-function deletePerson(playerID) {
+function deletePlayer(playerID) {
     // Put our data we want to send in a javascript object
     let data = {
         id: playerID
