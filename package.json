@@ -3,8 +3,7 @@
     "express": "^4.18.2",
     "express-handlebars": "^7.0.1",
     "forever": "^4.0.3",
-    "mysql": "^2.18.1",
-    "nodemon": "^2.0.20"
+    "mysql": "^2.18.1"
   },
   "name": "nodejs-starter-app",
   "description": "This guide is intended for the students in CS 340 who want to take a path through the class using Node.js and Javascript.",
