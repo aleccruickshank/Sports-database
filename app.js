@@ -8,7 +8,7 @@ var app = express();
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(express.static('public'))
-PORT = 7937;
+PORT = 7938;
 
 // Handlebars
 const { engine } = require('express-handlebars');
@@ -103,6 +103,44 @@ app.delete('/delete-player-ajax/', function(req,res,next){
             })
         }
     })});
+
+app.put('/put-player-ajax', function(req,res,next){
+    let data = req.body;
+  
+    let player= parseInt(data.fullname);
+    let weight = parseInt(data.weight);
+    let height = parseInt(data.height);
+    let dob = parseInt(data.dob);
+    let position = parseInt(data.position);
+  
+    let queryUpdatePlayer = `UPDATE Players SET player_weight = ?, player_height = ?, player_dob = ?, player_position = ? WHERE player_id = ?`;
+    let selectPlayer = `SELECT * FROM Players WHERE id = ?`
+  
+          // Run the 1st query
+          db.pool.query(queryUpdatePlayer, [player, weight, height, dob, position], function(error, rows, fields){
+              if (error) {
+  
+              // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+              console.log(error);
+              res.sendStatus(400);
+              }
+  
+              // If there was no error, we run our second query and return that data so we can use it to update the people's
+              // table on the front-end
+              else
+              {
+                  // Run the second query
+                  db.pool.query(selectPlayer, [player], function(error, rows, fields) {
+  
+                      if (error) {
+                          console.log(error);
+                          res.sendStatus(400);
+                      } else {
+                          res.send(rows);
+                      }
+                  })
+              }
+  })});
 
 /*
     LISTENER

@@ -1,6 +1,10 @@
 <!-- index.hbs -->
-<h1>The server is running!</h1>
-<p>If you see this text, the server is <strong>definitely</strong> working!</p>
+<head> 
+    {{#each css}}
+        <link rel="stylesheet" href="/css/{{this}}">
+    {{/each}}
+</head>
+<h1>Team Canuck</h1>
 
 <table border="1" cellpadding="5" id="player-table">
 
@@ -51,12 +55,50 @@
                 <label>Height</label>
                 <input type="text" name="height" id="input-height">
                 <label>Date of Birth</label>
-                <input type="date" name="dob" id="input-dob">
-                <label>Position</label>
-                <input type="text" name="position" id="input-position">
+                <input type="date" name="dob" value="2000-12-31" id="input-dob">
+                <label for="position">Position:</label>
+                <select name="position" id="input-position">
+                <option value="C">C</option>
+                <option value="RW">RW</option>
+                <option value="LW">LW</option>
+                <option value="RD">RD</option>
+                <option value="LD">LD</option>
+                </select>
             </fieldset>
             <input class="btn" type="submit" value="Add">
         </form>
+
+<!-- Update Player Form-->
+
+    <h4>Update Player</h4>
+    <form id="update-player-form-ajax">
+    <label for="input-fullname">Full name: </label>
+    <select name="input-fullname" id="mySelect">
+        <option value="test">Select a Person</option>
+        {{#each data}}
+        <option value="{{this.id}}">{{this.player_fname}} {{this.player_lname}}</option>
+        {{/each}}
+    </select>
+
+    <label for="input-weight">Weight: </label>
+    <input type="text" name="weight" id="input-weight-update">
+    <label for="input-height">Height: </label>
+    <input type="text" name="height" id="input-height-update">
+    <label for="input-height">Date of Birth: </label>
+    <input type="date" name="height" id="input-dob-update">
+    <label for="input-height">Position </label>
+    <select name="position" id="input-position-update">
+                <option value="C">C</option>
+                <option value="RW">RW</option>
+                <option value="LW">LW</option>
+                <option value="RD">RD</option>
+                <option value="LD">LD</option>
+    </select>
+    <input type="submit">
+
+</form>
+
+<script src="./js/update_player.js"></script>
 
 {{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
 <script src="./js/add_player.js"></script>
