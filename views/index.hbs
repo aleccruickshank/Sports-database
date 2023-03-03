@@ -1,0 +1,61 @@
+<!-- index.hbs -->
+<h1>The server is running!</h1>
+<p>If you see this text, the server is <strong>definitely</strong> working!</p>
+
+<table border="1" cellpadding="5" id="player-table">
+
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- Table headers --}}
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Weight</th>
+            <th>Height</th>
+            <th>Date of Birth</th>
+            <th>Position</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the id, fname, lname, homeworld and age, in order --}}
+        {{#each data}}
+        <tr>
+            <td>{{this.player_fname}}</td>
+            <td>{{this.player_lname}}</td>
+            <td>{{this.player_weight}}</td>
+            <td>{{this.player_height}}</td>
+            <td>{{this.player_dob}}</td>
+            <td>{{this.player_position}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+<!-- Add Player Form-->
+    <form id="add-player-form-ajax">
+            <legend>Add Player</legend>
+            <fieldset class="fields">
+                <label>First Name</label>
+                <input type="text" name="fname" id="input-fname">
+                <label>Last Name</label>
+                <input type="text" name="lname" id="input-lname">
+                <label>Weight</label>
+                <input type="text" name="weight" id="input-weight">
+                <label>Height</label>
+                <input type="text" name="height" id="input-height">
+                <label>Date of Birth</label>
+                <input type="date" name="dob" id="input-dob">
+                <label>Position</label>
+                <input type="text" name="position" id="input-position">
+            </fieldset>
+            <input class="btn" type="submit" value="Add">
+        </form>
+
+{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
+<script src="./js/add_player.js"></script>
