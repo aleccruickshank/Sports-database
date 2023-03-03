@@ -86,6 +86,14 @@ addRowToTable = (data) => {
     let heightCell = document.createElement("TD");
     let dobCell = document.createElement("TD");
     let positionCell = document.createElement("TD");
+    let deleteCell = document.createElement("TD"); // delete functionality
+
+    // delete button
+    deleteCell = document.createElement("button");
+    deleteCell.innerHTML = "Delete";
+    deleteCell.onclick = function(){
+        deletePlayer(newRow.id);
+    };
 
     // Fill the cells with correct data
     firstNameCell.innerText = newRow.player_fname;
@@ -102,7 +110,11 @@ addRowToTable = (data) => {
     row.appendChild(heightCell);
     row.appendChild(dobCell);
     row.appendChild(positionCell);
-    
+    row.appendChild(deleteCell);
+
+    // Add a row attribute so the deleteRow function can find a newly added row
+    row.setAttribute('data-value', newRow.id);
+
     // Add the row to the table
     currentTable.appendChild(row);
 
