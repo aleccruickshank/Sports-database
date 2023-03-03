@@ -32,6 +32,7 @@
             <td>{{this.player_height}}</td>
             <td>{{this.player_dob}}</td>
             <td>{{this.player_position}}</td>
+            <td><button onclick="deletePlayer({{this.id}})">Delete</button></td>
         </tr>
         {{/each}}
     </tbody>
@@ -59,3 +60,4 @@
 
 {{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
 <script src="./js/add_player.js"></script>
+<script src="./js/delete_player.js"></script>

@@ -74,6 +74,36 @@ app.post('/add-player-ajax', function(req, res)
 
 });
 
+app.delete('/delete-player-ajax/', function(req,res,next){
+    let data = req.body;
+    let playerID = parseInt(data.id);
+    let delete_Player = `DELETE FROM Players WHERE id = ?`;
+    // might need to delete from other tables too
+
+    // Run the 1st query
+    db.pool.query(delete_Player, [playerID], function(error, rows, fields){
+        if (error) {
+
+            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+            console.log(error);
+            res.sendStatus(400);
+        }
+
+        else
+        {
+            // Run the second query
+            db.pool.query(delete_Player, [playerID], function(error, rows, fields) {
+
+                if (error) {
+                    console.log(error);
+                    res.sendStatus(400);
+                } else {
+                    res.sendStatus(204);
+                }
+            })
+        }
+    })});
+
 /*
     LISTENER
 */
