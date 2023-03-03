@@ -22,5 +22,6 @@
   "bugs": {
     "url": "https://github.com/osu-cs340-ecampus/nodejs-starter-app/issues"
   },
-  "homepage": "https://github.com/osu-cs340-ecampus/nodejs-starter-app#readme"
+  "homepage": "https://github.com/osu-cs340-ecampus/nodejs-starter-app#readme",
+  "keywords": []
 }
