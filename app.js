@@ -4,6 +4,7 @@
 
 // Express
 var express = require('express');
+var moment = require('moment');
 var app = express();
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
@@ -28,6 +29,10 @@ app.get('/', function(req, res)
         
         db.pool.query(query1, function(error, rows, fields){
             
+            for (key in rows) {
+                rows[key].player_dob = moment(rows[key].player_dob).format("YYYY-MM-DD");
+            }
+
             res.render('index', {data: rows});
             
         })
