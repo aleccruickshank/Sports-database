@@ -32,7 +32,7 @@ app.get('/', function(req, res)
             for (key in rows) {
                 rows[key].player_dob = moment(rows[key].player_dob).format("YYYY-MM-DD");
             }
-
+            
             res.render('index', {data: rows});
             
         })
@@ -42,10 +42,12 @@ app.post('/add-player-ajax', function(req, res)
 {
     // Capture the incoming data and parse it back to a JS object
     let data = req.body;
-
+    
+    data.player_dob = moment(data.player_dob).toISOString();
+    
      // Create the query and run it on the database
      query1 = `INSERT INTO Players (player_fname, player_lname, player_weight, player_height, player_dob, player_position) 
-     VALUES ('${data.player_fname}', '${data.player_lname}', ${data.player_weight}, ${data.player_height}, ${data.player_dob}, '${data.player_position}')`;
+     VALUES ('${data.player_fname}', '${data.player_lname}', ${data.player_weight}, ${data.player_height}, '${data.player_dob}', '${data.player_position}')`;
      db.pool.query(query1, function(error, rows, fields){
  
          // Check to see if there was an error
@@ -57,7 +59,7 @@ app.post('/add-player-ajax', function(req, res)
          }
          else
          {
-             // If there was no error, perform a SELECT * on bsg_people
+             // If there was no error, perform a SELECT * on Players
              query2 = `SELECT * FROM Players;`;
              db.pool.query(query2, function(error, rows, fields){
  
@@ -71,7 +73,10 @@ app.post('/add-player-ajax', function(req, res)
                  // If all went well, send the results of the query back.
                  else
                  {
-                     res.send(rows);
+                    for (key in rows) {
+                        rows[key].player_dob = moment(rows[key].player_dob).format("YYYY-MM-DD");
+                    }
+                    res.send(rows);
                  }
              })
          }
@@ -116,7 +121,7 @@ app.put('/put-player-ajax', function(req,res,next){
     let player_id = parseInt(data.player_id);
     let player_weight = parseInt(data.player_weight);
     let player_height = parseInt(data.player_height);
-    let player_dob = Date.parse(data.player_dob);
+    let player_dob = moment(data.player_dob).format("YYYY-MM-DD");
     let player_position = data.player_position;
   
     let queryUpdatePlayer = `UPDATE Players SET player_weight = ?, player_height = ?, player_dob = ?, player_position = ? WHERE player_id = ?`;

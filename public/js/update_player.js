@@ -44,6 +44,7 @@ updatePlayerForm.addEventListener("submit", function (e) {
 
             // Add the new data to the table
             updateRow(xhttp.response, idValue);
+            location.reload();
 
         }
         else if (xhttp.readyState == 4 && xhttp.status != 200) {
@@ -58,7 +59,6 @@ updatePlayerForm.addEventListener("submit", function (e) {
 
 function updateRow(data, player_id){
     let parsedData = JSON.parse(data);
-    console.log(parsedData);
     
     let table = document.getElementById("player-table");
 

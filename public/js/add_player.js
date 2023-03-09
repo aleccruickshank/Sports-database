@@ -129,5 +129,5 @@ addRowToTable = (data) => {
     option.text = newRow.fname + ' ' +  newRow.lname;
     option.value = newRow.id;
     selectMenu.add(option);
-    // End of new step 8 code.
+    
 }

@@ -15,6 +15,7 @@ function deletePlayer(player_id) {
 
             // Add the new data to the table
             deleteRow(player_id);
+            location.reload();
 
         }
         else if (xhttp.readyState == 4 && xhttp.status != 204) {
