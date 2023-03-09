@@ -80,6 +80,7 @@ addRowToTable = (data) => {
 
     // Create a row and 4 cells
     let row = document.createElement("TR");
+    let idCell = document.createElement("TD");
     let firstNameCell = document.createElement("TD");
     let lastNameCell = document.createElement("TD");
     let weightCell = document.createElement("TD");
@@ -96,6 +97,7 @@ addRowToTable = (data) => {
     };
 
     // Fill the cells with correct data
+    idCell.innerText = newRow.player_id;
     firstNameCell.innerText = newRow.player_fname;
     lastNameCell.innerText = newRow.player_lname;
     weightCell.innerText = newRow.player_weight;
@@ -104,6 +106,7 @@ addRowToTable = (data) => {
     positionCell.innerText = newRow.player_position;
 
     // Add the cells to the row 
+    row.appendChild(idCell);
     row.appendChild(firstNameCell);
     row.appendChild(lastNameCell);
     row.appendChild(weightCell);

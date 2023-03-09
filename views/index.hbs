@@ -13,13 +13,13 @@
 
         {{!-- Table headers --}}
         <tr>
+            <th>ID</th>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Weight</th>
             <th>Height</th>
             <th>Date of Birth</th>
             <th>Position</th>
-            <th>Edit</th>
             <th>Delete</th>
         </tr>
     </thead>
@@ -30,13 +30,14 @@
         {{!-- For each row, print the id, fname, lname, homeworld and age, in order --}}
         {{#each data}}
         <tr>
+            <td>{{this.player_id}}</td>
             <td>{{this.player_fname}}</td>
             <td>{{this.player_lname}}</td>
             <td>{{this.player_weight}}</td>
             <td>{{this.player_height}}</td>
             <td>{{this.player_dob}}</td>
             <td>{{this.player_position}}</td>
-            <td><button onclick="deletePlayer({{this.id}})">Delete</button></td>
+            <td><button onclick="deletePlayer({{this.player_id}})">Delete</button></td>
         </tr>
         {{/each}}
     </tbody>
@@ -76,17 +77,16 @@
     <select name="input-fullname" id="mySelect">
         <option value="test">Select a Person</option>
         {{#each data}}
-        <option value="{{this.id}}">{{this.player_fname}} {{this.player_lname}}</option>
+        <option value="{{this.player_id}}">{{this.player_id}} : {{this.player_fname}} {{this.player_lname}}</option>
         {{/each}}
     </select>
-
     <label for="input-weight">Weight: </label>
-    <input type="text" name="weight" id="input-weight-update">
+    <input type="number" name="weight" id="input-weight-update">
     <label for="input-height">Height: </label>
-    <input type="text" name="height" id="input-height-update">
-    <label for="input-height">Date of Birth: </label>
-    <input type="date" name="height" id="input-dob-update">
-    <label for="input-height">Position </label>
+    <input type="number" name="height" id="input-height-update">
+    <label for="input-dob">Date of Birth: </label>
+    <input type="date" name="dob" id="input-dob-update">
+    <label for="input-position">Position </label>
     <select name="position" id="input-position-update">
                 <option value="C">C</option>
                 <option value="RW">RW</option>
@@ -100,6 +100,6 @@
 
 
 {{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
-<script src="./public/js/add_player.js"></script>
-<script src="./public/js/update_player.js"></script>
-<script src="./public/js/delete_player.js"></script>
+<script src="./js/add_player.js"></script>
+<script src="./js/update_player.js"></script>
+<script src="./js/delete_player.js"></script>
