@@ -1,0 +1,64 @@
+<head>
+    {{#each css}}
+        <link rel="stylesheet" href="/css/{{this}}">
+    {{/each}}
+</head>
+<h1>Team Canuck</h1>
+<a href="/">Home</a> | <a href="/seasons">Seasons</a> | <a href="/players">Players</a> | <a href="/teams">Teams</a>
+
+{{!-- Create a table --}}
+<table border="1" cellpadding="5" id="teams-table">
+
+    {{!-- Header section --}}
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>TEAM</th>
+        <th>DELETE</th>
+    <tr>
+
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+    {{!-- For each row --}}
+    {{#each data}}
+        <tr>
+            <td>{{this.team_id}}</td>
+            <td>{{this.team_name}}</td>
+            <td><button onclick="deleteTeam({{this.team_id}})">Delete</button></td>
+        </tr>
+    {{/each}}
+    </tbody>
+</table>
+
+<!-- Add Team Form-->
+<form id="add-season-form-ajax">
+    <legend>Add Team</legend>
+    <fieldset class="fields">
+        <label>Team: </label>
+        <input type="text" name="team-name" id="input-team-name">
+    </fieldset>
+    <input class="btn" type="submit" value="Add">
+</form>
+
+<!-- Update Team Form-->
+<h4>Update Team</h4>
+<form id="update-team-form-ajax">
+    <label for="input-team">Team: </label>
+    <select name="input-team" id="mySelect">
+        <option value="test">Select a Team</option>
+        {{#each data}}
+            <option value="{{this.team_id}}">{{this.team_id}} : {{this.team_name}}</option>
+        {{/each}}
+    </select>
+    <label for="team-name">Team: </label>
+    <input type="text" name="team-name" id="input-team-update">
+    <input type="submit">
+</form>
+
+
+<script src="./js/add_team.js"></script>
+<script src="./js/update_team.js"></script>
+<script src="./js/delete_team.js"></script>
