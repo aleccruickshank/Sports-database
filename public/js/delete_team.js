@@ -27,7 +27,7 @@ function deleteTeam(team_id) {
 }
 
 
-function deleteRow(season_id){
+function deleteRow(team_id){
 
     let table = document.getElementById("teams-table");
     for (let i = 0, row; row = table.rows[i]; i++) {

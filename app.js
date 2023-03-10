@@ -169,7 +169,7 @@ app.post('/add-team-ajax', function(req, res)
 
     // Create the query and run it on the database
     query1 = `INSERT INTO Teams (team_name) 
-     VALUES (${data.team_name})`;
+     VALUES ('${data.team_name}')`;
 
     db.pool.query(query1, function(error, rows, fields){
 
@@ -372,7 +372,7 @@ app.put('/put-team-ajax', function(req,res,next){
     let data = req.body;
 
     let team_id = parseInt(data.team_id);
-    let team_name = parseInt(data.team_name);
+    let team_name = data.team_name;
 
     let queryUpdateSeason = `UPDATE Teams SET team_name = ? WHERE team_id = ?`;
     let selectSeason = `SELECT * FROM Teams WHERE team_id = ?`
