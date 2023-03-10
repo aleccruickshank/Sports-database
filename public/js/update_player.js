@@ -8,14 +8,14 @@ updatePlayerForm.addEventListener("submit", function (e) {
     e.preventDefault();
 
     // Get form fields we need to get data from
-    let inputFullName = document.getElementById("mySelect");
+    let inputID = document.getElementById("mySelect");
     let inputWeight = document.getElementById("input-weight-update");
     let inputHeight = document.getElementById("input-height-update");
     let inputDob = document.getElementById("input-dob-update");
     let inputPosition = document.getElementById("input-position-update");
 
     // Get the values from the form fields
-    let fullNameValue = inputFullName.value;
+    let idValue = inputID.value;
     let weightValue = inputWeight.value;
     let heightValue = inputHeight.value;
     let dobValue = inputDob.value;
@@ -26,11 +26,11 @@ updatePlayerForm.addEventListener("submit", function (e) {
 
     // Put our data we want to send in a javascript object
     let data = {
-        fullname: fullNameValue,
-        weight: weightValue,
-        height: heightValue,
-        dob: dobValue,
-        position: positionValue
+        player_id: idValue,
+        player_weight: weightValue,
+        player_height: heightValue,
+        player_dob: dobValue,
+        player_position: positionValue
     }
     
     // Setup our AJAX request
@@ -43,7 +43,8 @@ updatePlayerForm.addEventListener("submit", function (e) {
         if (xhttp.readyState == 4 && xhttp.status == 200) {
 
             // Add the new data to the table
-            updateRow(xhttp.response, fullNameValue);
+            updateRow(xhttp.response, idValue);
+            location.reload();
 
         }
         else if (xhttp.readyState == 4 && xhttp.status != 200) {
@@ -56,7 +57,7 @@ updatePlayerForm.addEventListener("submit", function (e) {
 
 })
 
-function updateRow(data, personID){
+function updateRow(data, player_id){
     let parsedData = JSON.parse(data);
     
     let table = document.getElementById("player-table");
@@ -64,7 +65,7 @@ function updateRow(data, personID){
     for (let i = 0, row; row = table.rows[i]; i++) {
        //iterate through rows
        //rows would be accessed using the "row" variable assigned in the for loop
-       if (table.rows[i].getAttribute("data-value") == personID) {
+       if (table.rows[i].getAttribute("data-value") == player_id) {
 
             // Get the location of the row where we found the matching person ID
             let updateRowIndex = table.getElementsByTagName("tr")[i];
@@ -73,7 +74,7 @@ function updateRow(data, personID){
             let td = updateRowIndex.getElementsByTagName("td")[3];
 
             // Reassign homeworld to our value we updated to
-            td.innerHTML = parsedData[0].name; 
+            td.innerHTML = parsedData[0].player_id;
        }
     }
 }

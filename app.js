@@ -4,11 +4,12 @@
 
 // Express
 var express = require('express');
+var moment = require('moment');
 var app = express();
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(express.static('public'))
-PORT = 7938;
+PORT = 7940;
 
 // Handlebars
 const { engine } = require('express-handlebars');
@@ -24,11 +25,16 @@ var db = require('./database/db-connector')
 */
 app.get('/', function(req, res)
     {
-        let query1 = "select player_fname, player_lname, player_weight, player_height, player_dob, player_position from Players;"; 
+        let query1 = "select * from Players;"; 
         
         db.pool.query(query1, function(error, rows, fields){
-
+            
+            for (key in rows) {
+                rows[key].player_dob = moment(rows[key].player_dob).format("YYYY-MM-DD");
+            }
+            
             res.render('index', {data: rows});
+            
         })
     });  
     
@@ -36,10 +42,12 @@ app.post('/add-player-ajax', function(req, res)
 {
     // Capture the incoming data and parse it back to a JS object
     let data = req.body;
-
+    
+    data.player_dob = moment(data.player_dob).toISOString();
+    
      // Create the query and run it on the database
      query1 = `INSERT INTO Players (player_fname, player_lname, player_weight, player_height, player_dob, player_position) 
-     VALUES ('${data.player_fname}', '${data.player_lname}', ${data.player_weight}, ${data.player_height}, ${data.player_dob}, '${data.player_position}')`;
+     VALUES ('${data.player_fname}', '${data.player_lname}', ${data.player_weight}, ${data.player_height}, '${data.player_dob}', '${data.player_position}')`;
      db.pool.query(query1, function(error, rows, fields){
  
          // Check to see if there was an error
@@ -51,7 +59,7 @@ app.post('/add-player-ajax', function(req, res)
          }
          else
          {
-             // If there was no error, perform a SELECT * on bsg_people
+             // If there was no error, perform a SELECT * on Players
              query2 = `SELECT * FROM Players;`;
              db.pool.query(query2, function(error, rows, fields){
  
@@ -65,7 +73,10 @@ app.post('/add-player-ajax', function(req, res)
                  // If all went well, send the results of the query back.
                  else
                  {
-                     res.send(rows);
+                    for (key in rows) {
+                        rows[key].player_dob = moment(rows[key].player_dob).format("YYYY-MM-DD");
+                    }
+                    res.send(rows);
                  }
              })
          }
@@ -76,12 +87,12 @@ app.post('/add-player-ajax', function(req, res)
 
 app.delete('/delete-player-ajax/', function(req,res,next){
     let data = req.body;
-    let playerID = parseInt(data.id);
-    let delete_Player = `DELETE FROM Players WHERE id = ?`;
+    let player_id = parseInt(data.id);
+    let delete_Player = `DELETE FROM Players WHERE player_id = ?`;
     // might need to delete from other tables too
 
     // Run the 1st query
-    db.pool.query(delete_Player, [playerID], function(error, rows, fields){
+    db.pool.query(delete_Player, [player_id], function(error, rows, fields){
         if (error) {
 
             // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
@@ -92,7 +103,7 @@ app.delete('/delete-player-ajax/', function(req,res,next){
         else
         {
             // Run the second query
-            db.pool.query(delete_Player, [playerID], function(error, rows, fields) {
+            db.pool.query(delete_Player, [player_id], function(error, rows, fields) {
 
                 if (error) {
                     console.log(error);
@@ -107,17 +118,17 @@ app.delete('/delete-player-ajax/', function(req,res,next){
 app.put('/put-player-ajax', function(req,res,next){
     let data = req.body;
   
-    let player= parseInt(data.fullname);
-    let weight = parseInt(data.weight);
-    let height = parseInt(data.height);
-    let dob = parseInt(data.dob);
-    let position = parseInt(data.position);
+    let player_id = parseInt(data.player_id);
+    let player_weight = parseInt(data.player_weight);
+    let player_height = parseInt(data.player_height);
+    let player_dob = moment(data.player_dob).format("YYYY-MM-DD");
+    let player_position = data.player_position;
   
     let queryUpdatePlayer = `UPDATE Players SET player_weight = ?, player_height = ?, player_dob = ?, player_position = ? WHERE player_id = ?`;
-    let selectPlayer = `SELECT * FROM Players WHERE id = ?`
+    let selectPlayer = `SELECT * FROM Players WHERE player_id = ?`
   
           // Run the 1st query
-          db.pool.query(queryUpdatePlayer, [player, weight, height, dob, position], function(error, rows, fields){
+          db.pool.query(queryUpdatePlayer, [player_weight, player_height, player_dob, player_position, player_id], function(error, rows, fields){
               if (error) {
   
               // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
@@ -130,7 +141,7 @@ app.put('/put-player-ajax', function(req,res,next){
               else
               {
                   // Run the second query
-                  db.pool.query(selectPlayer, [player], function(error, rows, fields) {
+                  db.pool.query(selectPlayer, [player_id], function(error, rows, fields) {
   
                       if (error) {
                           console.log(error);
