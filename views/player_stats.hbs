@@ -1,0 +1,97 @@
+<head> 
+    {{#each css}}
+        <link rel="stylesheet" href="/css/{{this}}">
+    {{/each}}
+</head>
+<h1>Team Canuck</h1>
+<a href="/">Home</a> | <a href="/seasons">Seasons</a> | <a href="/players">Players</a> | <a href="/injuries">Injury Report</a> | <a href="/player-stats">Player Stats</a>
+
+{{!-- Create a table --}}
+<table border="1" cellpadding="5" id="player-stats-table">
+
+    {{!-- Header section --}}
+    <thead>
+                <tr>
+                <th>ID</th>
+                <th>Team</th>
+                <th>Season</th>
+                <th>Player</th>
+                <th>Goals</th>
+                <th>Assists</th>
+                <th>Points</th>
+                <th>Games Played</th>
+                <th>Delete</th>
+                <tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+        {{#each data}}
+        <tr>
+            <td>{{this.stats_id}}</td>
+            <td>{{this.team_id}}</td>
+            <td>{{this.season_id}}</td>
+            <td>{{this.player_id}}</td>
+            <td>{{this.goals}}</td>
+            <td>{{this.assists}}</td>
+            <td>{{this.points}}</td>
+            <td>{{this.games_played}}</td>
+            <td><button onclick="deletePlayerStats({{this.stats_id}})">Delete</button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+<!-- Add Season Form-->
+    <form id="add-injury-form-ajax">
+            <legend>Add Player Statistics</legend>
+            <fieldset class="fields">
+                <label>Team: </label>
+                <input type="number" name="team" id="input-team">
+                <label>Year: </label>
+                <input type="number" name="year" id="input-year">
+                <label>Player: </label>
+                <input type="number" name="player" id="input-player">
+                <label>Goals: </label>
+                <input type="number" name="goals" id="input-goals">
+                <label>Assists: </label>
+                <input type="number" name="assists" id="input-assists">
+                <label>Points: </label>
+                <input type="number" name="points" id="input-points">
+                <label>Games Played: </label>
+                <input type="number" name="games-played" id="input-games-played">
+            </fieldset>
+            <input class="btn" type="submit" value="Add">
+        </form>
+
+<!-- Update Player Form-->
+
+    <h4>Update Player Statistics</h4>
+    <form id="update-player-stats-form-ajax">
+    <label for="input-stats">Stats ID: </label>
+    <select name="input-stats" id="mySelect">
+        <option value="test">Select a Statistic</option>
+        {{#each data}}
+        <option value="{{this.stats_id}}">{{this.team_id}} - {{this.season_id}} - {{this.player_id}} : {{this.goals}} {{this.assists}} {{this.points}} {{this.games_played}}</option>
+        {{/each}}
+    </select>
+    <label>Team: </label>
+    <input type="number" name="team" id="input-team-update">
+    <label>Year: </label>
+    <input type="number" name="year" id="input-year-update">
+    <label>Player: </label>
+    <input type="number" name="player" id="input-player-update">
+    <label>Goals: </label>
+    <input type="number" name="goals" id="input-goals-update">
+    <label>Assists: </label>
+    <input type="number" name="assists" id="input-assists-update">
+    <label>Points: </label>
+    <input type="number" name="points" id="input-points-update">
+    <label>Games Played: </label>
+    <input type="number" name="games-played" id="input-games-played-update">
+    <input type="submit">
+    </form>
+
+<script src="./js/add_player_stats.js"></script>
+<script src="./js/delete_player_stats.js"></script>
+<script src="./js/update_player_stats.js"></script>
