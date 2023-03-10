@@ -63,6 +63,49 @@ app.get('/seasons', function(req, res)
             res.render('seasons', {data: rows});
             
         })
+
+    });  
+
+app.get('/injuries', function(req, res)
+    {
+        // let query1 = "select * from Games_Injured;"; 
+
+        // let query2 = "select * from Players;";
+
+        // let query3 = "select * from Seasons;";
+        
+        // db.pool.query(query1, function(error, rows, fields){
+            
+        //     let injuries = rows;
+             
+        //     db.pool.query(query2, function(error, rows, fields){
+            
+        //         let players = rows;
+                
+        //         db.pool.query(query3, function(error, rows, fields){
+            
+        //             let seasons = rows;
+        //             let int = {data: {injuries, players, seasons}};
+        //             console.log(int.data.injuries[0].injury_id);
+        //             // return res.render('injuries', {data: injuries, players: players, seasons: seasons});
+        //             return res.render('injuries', {data: [injuries, players, seasons]});
+                    
+                
+        //     })
+            
+        // })
+
+        let query1 = "select * from Games_Injured;"; 
+        
+        db.pool.query(query1, function(error, rows, fields){
+            
+            res.render('injuries', {data: rows});
+            
+        })
+
+        
+    });  
+
     });
 
 app.get('/teams', function (req, res)
@@ -162,6 +205,46 @@ app.post('/add-season-ajax', function(req, res)
 
 });
 
+app.post('/add-injury-ajax', function(req, res)
+{
+    // Capture the incoming data and parse it back to a JS object
+    let data = req.body;
+    
+     // Create the query and run it on the database
+     query1 = `INSERT INTO Games_Injured (season_id, player_id, games_missed, injury_type) 
+     VALUES (${data.season_id}, ${data.player_id}, ${data.games_missed}, '${data.injury_type}')`;
+
+     db.pool.query(query1, function(error, rows, fields){
+        
+         // Check to see if there was an error
+         if (error) {
+ 
+             // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+             console.log(error)
+             res.sendStatus(400);
+         }
+         else
+         {
+             // If there was no error, perform a SELECT * on Players
+             query2 = `SELECT * FROM Games_Injured;`;
+             db.pool.query(query2, function(error, rows, fields){
+ 
+                 // If there was an error on the second query, send a 400
+                 if (error) {
+                     
+                     // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+                     console.log(error);
+                     res.sendStatus(400);
+                 }
+                 // If all went well, send the results of the query back.
+                 else
+                 {
+                    res.send(rows);
+                 }
+             })
+         }
+     })
+
 app.post('/add-team-ajax', function(req, res)
 {
     // Capture the incoming data and parse it back to a JS object
@@ -201,6 +284,7 @@ app.post('/add-team-ajax', function(req, res)
             })
         }
     })
+
 
 });
 
@@ -263,6 +347,36 @@ app.delete('/delete-season-ajax/', function(req,res,next){
             })
         }
     })});
+
+app.delete('/delete-injury-ajax/', function(req,res,next){
+        let data = req.body;
+        let injury_id = parseInt(data.id);
+        let delete_Injury = `DELETE FROM Games_Injured WHERE injury_id = ?`;
+        // might need to delete from other tables too
+    
+        // Run the 1st query
+        db.pool.query(delete_Injury, [injury_id], function(error, rows, fields){
+            if (error) {
+    
+                // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+                console.log(error);
+                res.sendStatus(400);
+            }
+    
+            else
+            {
+                // Run the second query
+                db.pool.query(delete_Injury, [injury_id], function(error, rows, fields) {
+    
+                    if (error) {
+                        console.log(error);
+                        res.sendStatus(400);
+                    } else {
+                        res.sendStatus(204);
+                    }
+                })
+            }
+        })});
 
 app.delete('/delete-team-ajax/', function(req,res,next){
     let data = req.body;
@@ -357,6 +471,44 @@ app.put('/put-season-ajax', function(req,res,next){
               {
                   // Run the second query
                   db.pool.query(selectSeason, [season_id], function(error, rows, fields) {
+  
+                      if (error) {
+                          console.log(error);
+                          res.sendStatus(400);
+                      } else {
+                          res.send(rows);
+                      }
+                  })
+              }
+  })});
+
+app.put('/put-injury-ajax', function(req,res,next){
+    let data = req.body;
+  
+    let injury_id = parseInt(data.injury_id);
+    let season_id = parseInt(data.season_id);
+    let player_id = parseInt(data.player_id);
+    let games_missed = parseInt(data.games_missed);
+    let injury_type = data.injury_type;
+  
+    let queryUpdateInjury = `UPDATE Games_Injured SET season_id = ?, player_id = ?, games_missed = ?, injury_type = ? WHERE injury_id = ?`;
+    let selectInjury = `SELECT * FROM Games_Injured WHERE injury_id = ?`
+  
+          // Run the 1st query
+          db.pool.query(queryUpdateInjury, [season_id, player_id, games_missed, injury_type, injury_id], function(error, rows, fields){
+              if (error) {
+  
+              // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+              console.log(error);
+              res.sendStatus(400);
+              }
+  
+              // If there was no error, we run our second query and return that data so we can use it to update the people's
+              // table on the front-end
+              else
+              {
+                  // Run the second query
+                  db.pool.query(selectInjury, [injury_id], function(error, rows, fields) {
   
                       if (error) {
                           console.log(error);

@@ -1,0 +1,95 @@
+<head> 
+    {{#each css}}
+        <link rel="stylesheet" href="/css/{{this}}">
+    {{/each}}
+</head>
+<h1>Team Canuck</h1>
+<a href="/">Home</a> | <a href="/seasons">Seasons</a> | <a href="/players">Players</a> | <a href="/injuries">Injury Report</a>
+
+{{!-- Create a table --}}
+<table border="1" cellpadding="5" id="injuries-table">
+
+    {{!-- Header section --}}
+    <thead>
+                <tr>
+                <th>ID</th>
+                <th>Year</th>
+                <th>Player</th>
+                <th>Games Missed</th>
+                <th>Injury Type</th>
+                <th>Delete</th>
+                <tr>
+
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the id, fname, lname, homeworld and age, in order --}}
+        
+       
+        {{!-- {{#each data}}
+        <tr>
+            <td>{{injury_id}}</td>
+            <td>{{season_year}}</td>
+            <td>{{player_fname}} {{player_lname}}</td>
+            <td>{{games_missed}}</td>
+            <td>{{injury_type}}</td>
+            <td><button onclick="deleteSeason({{injury_id}})">Delete</button></td>
+        </tr>
+        {{/each}} --}}
+        {{#each data}}
+        <tr>
+            <td>{{this.injury_id}}</td>
+            <td>{{this.season_id}}</td>
+            <td>{{this.player_id}}</td>
+            <td>{{this.games_missed}}</td>
+            <td>{{this.injury_type}}</td>
+            <td><button onclick="deleteInjury({{this.injury_id}})">Delete</button></td>
+        </tr>
+        {{/each}}
+        
+    </tbody>
+</table>
+
+<!-- Add Season Form-->
+    <form id="add-injury-form-ajax">
+            <legend>Add Injury Report</legend>
+            <fieldset class="fields">
+                <label>Year: </label>
+                <input type="number" name="year" id="input-year">
+                <label>Player: </label>
+                <input type="number" name="player" id="input-player">
+                <label>Games Missed: </label>
+                <input type="number" name="games-missed" id="input-games-missed">
+                <label>Injury Type: </label>
+                <input type="text" name="injury" id="input-injury">
+            </fieldset>
+            <input class="btn" type="submit" value="Add">
+        </form>
+
+<!-- Update Player Form-->
+
+    <h4>Update Injury Report</h4>
+    <form id="update-injury-form-ajax">
+    <label for="input-injury">Injury ID: </label>
+    <select name="input-injury" id="mySelect">
+        <option value="test">Select an Injury</option>
+        {{#each data}}
+        <option value="{{this.injury_id}}">{{this.season_id}} - {{this.injury_id}} : {{this.injury_type}}</option>
+        {{/each}}
+    </select>
+    <label>Year: </label>
+    <input type="number" name="year" id="input-year-update">
+    <label>Player: </label>
+    <input type="number" name="player" id="input-player-update">
+    <label>Games Missed: </label>
+    <input type="number" name="games-missed" id="input-games-missed-update">
+    <label>Injury Type: </label>
+    <input type="text" name="injury" id="input-injury-update">
+    <input type="submit">
+    </form>
+
+<script src="./js/add_injury.js"></script>
+<script src="./js/delete_injury.js"></script>
+<script src="./js/update_injury.js"></script>
