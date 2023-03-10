@@ -1,0 +1,64 @@
+<head> 
+    {{#each css}}
+        <link rel="stylesheet" href="/css/{{this}}">
+    {{/each}}
+</head>
+<h1>Team Canuck</h1>
+<a href="/">Home</a> | <a href="/seasons">Seasons</a> | <a href="/players">Players</a>
+
+{{!-- Create a table --}}
+<table border="1" cellpadding="5" id="seasons-table">
+
+    {{!-- Header section --}}
+    <thead>
+                <tr>
+                <th>ID</th>
+                <th>Year</th>
+                <th>Delete</th>
+                <tr>
+
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the id, fname, lname, homeworld and age, in order --}}
+        {{#each data}}
+        <tr>
+            <td>{{this.season_id}}</td>
+            <td>{{this.season_year}}</td>
+            <td><button onclick="deleteSeason({{this.season_id}})">Delete</button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+<!-- Add Season Form-->
+    <form id="add-season-form-ajax">
+            <legend>Add Season</legend>
+            <fieldset class="fields">
+                <label>Year: </label>
+                <input type="number" name="year" id="input-year">
+            </fieldset>
+            <input class="btn" type="submit" value="Add">
+        </form>
+
+<!-- Update Player Form-->
+
+    <h4>Update Season</h4>
+    <form id="update-season-form-ajax">
+    <label for="input-season">Year: </label>
+    <select name="input-season" id="mySelect">
+        <option value="test">Select a Season</option>
+        {{#each data}}
+        <option value="{{this.season_id}}">{{this.season_id}} : {{this.season_year}}</option>
+        {{/each}}
+    </select>
+    <label for="year">Year: </label>
+    <input type="number" name="year" id="input-year-update">
+    <input type="submit">
+    </form>
+
+<script src="./js/add_season.js"></script>
+<script src="./js/update_season.js"></script>
+<script src="./js/delete_season.js"></script>

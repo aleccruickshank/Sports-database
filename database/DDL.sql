@@ -3,7 +3,7 @@ SET AUTOCOMMIT=0;
 
 -- Initialize the table that tracks NHL seasons and their corresponding year.
 create or replace table Seasons (
-    season_id int(11) NOT NULL,
+    season_id int(11) auto_increment NOT NULL,
     season_year year NOT NULL,
     PRIMARY KEY (season_id)
 );
