@@ -106,7 +106,6 @@ app.get('/injuries', function(req, res)
         
     });  
 
-    });
 
 app.get('/teams', function (req, res)
     {
@@ -116,6 +115,15 @@ app.get('/teams', function (req, res)
             res.render('teams', {data: rows});
         })
     });
+
+app.get('/player-stats', function (req, res)
+{
+    let query1 = "select * from Player_Stats;";
+
+    db.pool.query(query1, function (error, rows, fields) {
+        res.render('player_stats', {data: rows});
+    })
+});
     
 app.post('/add-player-ajax', function(req, res)
 {
@@ -243,7 +251,7 @@ app.post('/add-injury-ajax', function(req, res)
                  }
              })
          }
-     })
+     });
 
 app.post('/add-team-ajax', function(req, res)
 {
@@ -285,8 +293,48 @@ app.post('/add-team-ajax', function(req, res)
         }
     })
 
-
 });
+
+app.post('/add-player-stats-ajax', function(req, res)
+{
+    // Capture the incoming data and parse it back to a JS object
+    let data = req.body;
+
+    // Create the query and run it on the database
+    query1 = `INSERT INTO Player_Stats (team_id, season_id, player_id, goals, assists, points, games_played) 
+ VALUES (${data.team_id}, ${data.season_id}, ${data.player_id}, '${data.goals}', '${data.assists}', '${data.points}', '${data.games_played}')`;
+
+    db.pool.query(query1, function(error, rows, fields){
+
+        // Check to see if there was an error
+        if (error) {
+
+            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+            console.log(error)
+            res.sendStatus(400);
+        }
+        else
+        {
+            // If there was no error, perform a SELECT * on Players
+            query2 = `SELECT * FROM Player_Stats;`;
+            db.pool.query(query2, function(error, rows, fields){
+
+                // If there was an error on the second query, send a 400
+                if (error) {
+
+                    // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+                    console.log(error);
+                    res.sendStatus(400);
+                }
+                // If all went well, send the results of the query back.
+                else
+                {
+                    res.send(rows);
+                }
+            })
+        }
+    });
+
 
 app.delete('/delete-player-ajax/', function(req,res,next){
     let data = req.body;
@@ -376,7 +424,8 @@ app.delete('/delete-injury-ajax/', function(req,res,next){
                     }
                 })
             }
-        })});
+    })
+});
 
 app.delete('/delete-team-ajax/', function(req,res,next){
     let data = req.body;
@@ -406,7 +455,39 @@ app.delete('/delete-team-ajax/', function(req,res,next){
                 }
             })
         }
-    })});
+    })
+});
+
+app.delete('/delete-player-stats-ajax/', function(req,res,next){
+    let data = req.body;
+    let stats_id = parseInt(data.id);
+    let delete_PlayerStats = `DELETE FROM Player_Stats WHERE status_id = ?`;
+    // might need to delete from other tables too
+
+    // Run the 1st query
+    db.pool.query(delete_PlayerStats, [stats_id], function(error, rows, fields){
+        if (error) {
+
+            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+            console.log(error);
+            res.sendStatus(400);
+        }
+
+        else
+        {
+            // Run the second query
+            db.pool.query(delete_PlayerStats, [stats_id], function(error, rows, fields) {
+
+                if (error) {
+                    console.log(error);
+                    res.sendStatus(400);
+                } else {
+                    res.sendStatus(204);
+                }
+            })
+        }
+    })
+});
 
 app.put('/put-player-ajax', function(req,res,next){
     let data = req.body;
@@ -554,7 +635,51 @@ app.put('/put-team-ajax', function(req,res,next){
                 }
             })
         }
-    })});
+    })
+});
+
+app.put('/put-player-stats-ajax', function(req,res,next){
+    let data = req.body;
+
+    let stats_id = parseInt(data.stats_id);
+    let team_id = parseInt(data.team_id);
+    let season_id = parseInt(data.season_id);
+    let player_id = parseInt(data.player_id);
+    let goals = parseInt(data.goals);
+    let assists = parseInt(data.assists);
+    let points = parseInt(data.points);
+    let games_played = parseInt(data.games_played);
+
+    let queryUpdatePlayerStats = `UPDATE Player_Stats SET team_id = ?, season_id = ?, player_id = ?, goals = ?, assists = ?, points = ?, games_played = ? WHERE stats_id = ?`;
+    let selectPlayerStats = `SELECT * FROM Player_Stats WHERE stats_id = ?`
+
+    // Run the 1st query
+    db.pool.query(queryUpdatePlayerStats, [team_id, season_id, player_id, goals, assists, points, games_played], function(error, rows, fields){
+        if (error) {
+
+            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+            console.log(error);
+            res.sendStatus(400);
+        }
+
+            // If there was no error, we run our second query and return that data so we can use it to update the people's
+        // table on the front-end
+        else
+        {
+            // Run the second query
+            db.pool.query(selectPlayerStats, [stats_id], function(error, rows, fields) {
+
+                if (error) {
+                    console.log(error);
+                    res.sendStatus(400);
+                } else {
+                    res.send(rows);
+                }
+            })
+        }
+    })
+});
+
 
 /*
     LISTENER
