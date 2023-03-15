@@ -1,20 +1,27 @@
 <head>
-    {{#each css}}
-        <link rel="stylesheet" href="/css/{{this}}">
-    {{/each}}
+        <link href="css/style.css" rel="stylesheet" type="text/css">
 </head>
 <h1>Team Canuck</h1>
-<a href="/">Home</a> | <a href="/seasons">Seasons</a> | <a href="/players">Players</a> | <a href="/teams">Teams</a>
+
+<div class="nav-bar">
+    <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/players">Players</a></li>
+    <li><a href="/teams">Teams</a></li>
+    <li><a href="/injuries">Injury Report</a></li>
+    <li><a href="/seasons">Seasons</a></li>
+    </ul>
+</div>
 
 {{!-- Create a table --}}
-<table border="1" cellpadding="5" id="teams-table">
+<table id="teams-table">
 
     {{!-- Header section --}}
     <thead>
     <tr>
-        <th>ID</th>
-        <th>TEAM</th>
-        <th>DELETE</th>
+        <th>Team ID</th>
+        <th>Team</th>
+        <th>Delete</th>
     <tr>
 
     </thead>
@@ -34,28 +41,29 @@
 </table>
 
 <!-- Add Team Form-->
-<form id="add-team-form-ajax">
+<form id="add-team-form-ajax" class="add-form">
     <legend>Add Team</legend>
     <fieldset class="fields">
-        <label>Team: </label>
-        <input type="text" name="team-name" id="input-team-name">
+        <input type="text" name="team-name" id="input-team-name" placeholder="Team Name">
     </fieldset>
     <input class="btn" type="submit" value="Add">
 </form>
 
 <!-- Update Team Form-->
 <h4>Update Team</h4>
-<form id="update-team-form-ajax">
-    <label for="input-team">Team: </label>
+<form id="update-team-form-ajax" class="add-form">
+    <legend>Update Team</legend>
+    <fieldset class="fields">
     <select name="input-team" id="mySelect">
         <option value="test">Select a Team</option>
         {{#each data}}
             <option value="{{this.team_id}}">{{this.team_id}} : {{this.team_name}}</option>
         {{/each}}
     </select>
-    <label for="team-name">Team: </label>
-    <input type="text" name="team-name" id="input-team-update">
+    <input type="text" name="team-name" id="input-team-update" placeholder="Team Name">
+    </fieldset>
     <input type="submit">
+    
 </form>
 
 

@@ -1,15 +1,20 @@
 <head> 
-    {{#each css}}
-        <link rel="stylesheet" href="/css/{{this}}">
-    {{/each}}
+        <link href="css/style.css" rel="stylesheet" type="text/css">
 </head>
 <h1>Team Canuck</h1>
 
-<a href="/">Home</a> | <a href="/seasons">Seasons</a> | <a href="/players">Players</a> | <a href="/injuries">Injury Report</a> | <a href="/teams">Teams</a>
-
+<div class="nav-bar">
+    <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/players">Players</a></li>
+    <li><a href="/teams">Teams</a></li>
+    <li><a href="/injuries">Injury Report</a></li>
+    <li><a href="/seasons">Seasons</a></li>
+    </ul>
+</div>
 
 {{!-- Create a table --}}
-<table border="1" cellpadding="5" id="seasons-table">
+<table id="seasons-table">
 
     {{!-- Header section --}}
     <thead>
@@ -36,28 +41,32 @@
 </table>
 
 <!-- Add Season Form-->
-    <form id="add-season-form-ajax">
+    <form id="add-season-form-ajax" class="add-form">
             <legend>Add Season</legend>
             <fieldset class="fields">
-                <label>Year: </label>
-                <input type="number" name="year" id="input-year">
+                <input type="number" name="year" id="input-year" placeholder="Year">
             </fieldset>
             <input class="btn" type="submit" value="Add">
         </form>
 
-<!-- Update Player Form-->
+<!-- Update Season Form-->
 
     <h4>Update Season</h4>
-    <form id="update-season-form-ajax">
-    <label for="input-season">Year: </label>
-    <select name="input-season" id="mySelect">
+    <form id="update-season-form-ajax" class="add-form">
+    <legend>Update Season</legend>
+    <fieldset class="fields">
+    <ul>
+    <li><select name="input-season" id="mySelect">
         <option value="test">Select a Season</option>
         {{#each data}}
         <option value="{{this.season_id}}">{{this.season_id}} : {{this.season_year}}</option>
         {{/each}}
     </select>
-    <label for="year">Year: </label>
-    <input type="number" name="year" id="input-year-update">
+    </li>
+    
+    <li><input type="number" name="year" id="input-year-update" placeholder="Year"></li>
+    </fieldset>
+    </ul>
     <input type="submit">
     </form>
 

@@ -78,3 +78,4 @@ function updateRow(data, injury_id){
        }
     }
 }
+
