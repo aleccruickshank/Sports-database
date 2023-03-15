@@ -1,20 +1,28 @@
 <head> 
-    {{#each css}}
-        <link rel="stylesheet" href="/css/{{this}}">
-    {{/each}}
+        <link href="css/style.css" rel="stylesheet" type="text/css">
 </head>
 <h1>Team Canuck</h1>
-<a href="/">Home</a> | <a href="/seasons">Seasons</a> | <a href="/players">Players</a> | <a href="/injuries">Injury Report</a>
+
+<div class="nav-bar">
+    <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/players">Players</a></li>
+    <li><a href="/teams">Teams</a></li>
+    <li><a href="/injuries">Injury Report</a></li>
+    <li><a href="/seasons">Seasons</a></li>
+    </ul>
+</div>
 
 {{!-- Create a table --}}
-<table border="1" cellpadding="5" id="injuries-table">
+<table id="injuries-table">
 
     {{!-- Header section --}}
     <thead>
                 <tr>
                 <th>ID</th>
                 <th>Year</th>
-                <th>Player</th>
+                <th>Player ID</th>
+                <th>Player Name</th>
                 <th>Games Missed</th>
                 <th>Injury Type</th>
                 <th>Delete</th>
@@ -24,25 +32,12 @@
 
     {{!-- Body section --}}
     <tbody>
-
-        {{!-- For each row, print the id, fname, lname, homeworld and age, in order --}}
-        
-       
-        {{!-- {{#each data}}
-        <tr>
-            <td>{{injury_id}}</td>
-            <td>{{season_year}}</td>
-            <td>{{player_fname}} {{player_lname}}</td>
-            <td>{{games_missed}}</td>
-            <td>{{injury_type}}</td>
-            <td><button onclick="deleteSeason({{injury_id}})">Delete</button></td>
-        </tr>
-        {{/each}} --}}
         {{#each data}}
         <tr>
             <td>{{this.injury_id}}</td>
-            <td>{{this.season_id}}</td>
+            <td>{{this.season_year}}</td>
             <td>{{this.player_id}}</td>
+            <td>{{this.player_name}}</td>
             <td>{{this.games_missed}}</td>
             <td>{{this.injury_type}}</td>
             <td><button onclick="deleteInjury({{this.injury_id}})">Delete</button></td>
@@ -52,44 +47,70 @@
     </tbody>
 </table>
 
-<!-- Add Season Form-->
-    <form id="add-injury-form-ajax">
+<!-- Add Injury Form-->
+    {{!-- <form id="add-injury-form-ajax" class="add-form">
             <legend>Add Injury Report</legend>
+            <ul>
             <fieldset class="fields">
-                <label>Year: </label>
-                <input type="number" name="year" id="input-year">
-                <label>Player: </label>
-                <input type="number" name="player" id="input-player">
-                <label>Games Missed: </label>
-                <input type="number" name="games-missed" id="input-games-missed">
-                <label>Injury Type: </label>
-                <input type="text" name="injury" id="input-injury">
+                <li><input type="number" name="year" id="input-year" placeholder="Year"></li>
+                <li><input type="number" name="player" id="input-player" placeholder="Player"></li>
+                <li><input type="number" name="games-missed" id="input-games-missed" placeholder="Games Missed"></li>
+                <li><input type="text" name="injury" id="input-injury" placeholder="Describe Injury"></li>
             </fieldset>
+            </ul>
+            <input class="btn" type="submit" value="Add">
+        </form> --}}
+
+    <form id="add-injury-form-ajax" class="add-form">
+            <legend>Add Injury Report</legend>
+            <ul>
+            <fieldset class="fields">
+                <select name="input-year" id="input-year" required>
+                {{#each secData}}
+                <option value="{{this.season_id}}">{{this.season_year}}</option>
+                {{/each}}
+                </select>
+                <select name="input-player" id="input-player" required>
+                {{#each thirdData}}
+                <option value="{{this.player_id}}">{{this.player_fname}} {{this.player_lname}}: {{this.player_id}}</option>
+                {{/each}}
+                </select>
+                <li><input type="number" name="games-missed" id="input-games-missed" placeholder="Games Missed"></li>
+                <li><input type="text" name="injury" id="input-injury" placeholder="Describe Injury"></li>
+            </fieldset>
+            </ul>
             <input class="btn" type="submit" value="Add">
         </form>
 
 <!-- Update Player Form-->
 
-    <h4>Update Injury Report</h4>
-    <form id="update-injury-form-ajax">
-    <label for="input-injury">Injury ID: </label>
-    <select name="input-injury" id="mySelect">
+    
+    <form id="update-injury-form-ajax" class="add-form">
+    <legend>Update Injury Report</legend>
+    <ul>
+    <fieldset class="fields">
+    <select name="input-injury" id="mySelect" onchange="sendID(document.getElementById('mySelect').value)" required>
         <option value="test">Select an Injury</option>
         {{#each data}}
-        <option value="{{this.injury_id}}">{{this.season_id}} - {{this.injury_id}} : {{this.injury_type}}</option>
+        <option value="{{this.injury_id}}">{{this.player_name}} - Injury ID: {{this.injury_id}}</option>
         {{/each}}
     </select>
-    <label>Year: </label>
-    <input type="number" name="year" id="input-year-update">
-    <label>Player: </label>
-    <input type="number" name="player" id="input-player-update">
-    <label>Games Missed: </label>
-    <input type="number" name="games-missed" id="input-games-missed-update">
-    <label>Injury Type: </label>
-    <input type="text" name="injury" id="input-injury-update">
+    <select name="input-injury" id="input-year-update" required>
+        <option value="test">Select an Injury</option>
+        {{#each secData}}
+        <option value="{{this.season_id}}">{{this.season_year}}</option>
+        {{/each}}
+    </select>
+    {{!-- <li><input type="number" name="year" id="input-year-update" placeholder="Year"></li> --}}
+    <li><input type="number" name="player" id="input-player-update" placeholder="Player"></li>
+    <li><input type="number" name="games-missed" id="input-games-missed-update" placeholder="Games Missed"></li>
+    <li><input type="text" name="injury" id="input-injury-update" placeholder="Describe Injury"></li>
+    </fieldset>
+    </ul>
     <input type="submit">
     </form>
 
 <script src="./js/add_injury.js"></script>
+<script src="./js/fill_injury.js"></script>
 <script src="./js/delete_injury.js"></script>
 <script src="./js/update_injury.js"></script>

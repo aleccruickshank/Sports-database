@@ -52,6 +52,7 @@ addPersonForm.addEventListener("submit", function (e) {
             inputHeight.value = '';
             inputDob.value = '';
             inputPosition.value = '';
+            location.reload();
         }
         else if (xhttp.readyState == 4 && xhttp.status != 200) {
             console.log("There was an error with the input.")

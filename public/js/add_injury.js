@@ -38,7 +38,7 @@ addPersonForm.addEventListener("submit", function (e) {
 
             // Add the new data to the table
             addRowToTable(xhttp.response);
-
+            
             // Clear the input fields for another transaction
             inputYear.value = '';
             inputPlayer.value = '';

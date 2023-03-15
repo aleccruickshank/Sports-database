@@ -1,3 +1,137 @@
 body {
-    color: red;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    
 }
+
+table {
+    border-collapse: collapse;
+    margin: 3% 10% 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
+    text-align: center;
+}
+
+thead tr {
+    background-color: #4441ee;
+    color: #ffffff;
+    text-align: left;
+    border-radius: 15px;
+    text-align: center;
+}
+
+th,
+td {
+    padding: 8px 12px;
+}
+
+tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+tbody tr:last-of-type {
+    border-bottom: 2px solid #4441ee;
+}
+
+tbody tr:hover {
+    background-color: #dddddd;
+    color: #4441ee;
+}
+
+.nav-bar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 8%;
+    background-color: #f1f1f1;
+    height: 100%; /* Full height */
+    position: fixed; /* Make it stick, even on scroll */
+    overflow: auto; /* Enable scrolling if the sidenav has too much content */
+}
+
+.nav-bar ul li {
+    margin: 5px;
+    padding: 5px;
+}
+
+.nav-bar ul li a {
+    display: block;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.nav-bar ul li a:hover {
+    background-color: #ebebeb;
+}
+
+.add-form {
+    margin: 2% 10% 0;
+    box-sizing: border-box;
+    width: 15%;
+    border: 2px solid #4441ee;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.add-form legend {
+    font-weight: bold;
+    color: #4441ee;;
+}
+
+.add-form input[type=submit] {
+    color: white;
+    background-color: #6bf89a;
+    padding: 7px;
+    border-radius: 5px;
+    border: none;
+    width: 40%;
+}
+
+.add-form ul {
+    list-style-type: none;
+    padding-left: 0px;
+}
+
+.add-form .fields {
+    border: none;
+}
+
+.add-form .fields select{
+    padding: 5px;
+    margin-left: 5px;
+    margin-top: 5px;
+    border-radius: 8px;
+}
+
+.add-form .fields input {
+    border:0;
+    border-bottom:1px solid #eee;
+    margin-left: none;
+    margin-top: 5px;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.update-form {
+    margin: 3% 10% 0;
+}
+
+button {
+    appearance:none;
+    -webkit-appearance:none;
+    padding: 5px;
+    border:none;
+    background-color:#ff3e3e;
+    color:#fff;
+    font-weight:600;
+    border-radius:5px;
+    width:100%;
+  
+  }

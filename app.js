@@ -9,7 +9,7 @@ var app = express();
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(express.static('public'))
-PORT = 7940;
+PORT = 61522;
 
 // Handlebars
 const { engine } = require('express-handlebars');
@@ -54,6 +54,43 @@ app.get('/players', function(req, res)
         })
     });
 
+app.get('/fill-player-ajax', function(req, res)
+    {
+        let data = req.query;
+        let player_id = parseInt(data.player_id)
+
+        // let query1 = "select player_weight, player_height, player_dob, player_position from Players where player_id = ?;"; 
+        let query1 = "select * from Players where player_id = ?;"
+        
+        db.pool.query(query1, [player_id], function(error, rows, fields){
+            
+            // Format the birth date to YYYY-MM-DD
+            
+            for (key in rows) {
+                rows[key].player_dob = moment(rows[key].player_dob).format("YYYY-MM-DD");
+            }
+
+            res.send(rows);
+            
+        })
+    });
+
+app.get('/fill-injury-ajax', function(req, res)
+    {
+        let data = req.query;
+        let injury_id = parseInt(data.injury_id)
+       
+        let query1 = "select * from Games_Injured where injury_id = ?;"
+        
+        db.pool.query(query1, [injury_id], function(error, rows, fields){
+            
+
+            res.send(rows);
+            
+        })
+    });
+
+
 app.get('/seasons', function(req, res)
     {
         let query1 = "select * from Seasons;"; 
@@ -66,47 +103,33 @@ app.get('/seasons', function(req, res)
 
     });  
 
-app.get('/injuries', function(req, res)
-    {
-        // let query1 = "select * from Games_Injured;"; 
-
-        // let query2 = "select * from Players;";
-
-        // let query3 = "select * from Seasons;";
+app.get('/injuries', async (req, res) => {
         
-        // db.pool.query(query1, function(error, rows, fields){
-            
-        //     let injuries = rows;
-             
-        //     db.pool.query(query2, function(error, rows, fields){
-            
-        //         let players = rows;
+        
+        let query1 = "SELECT gi.injury_id, p.player_id, s.season_year, s.season_id, CONCAT(p.player_fname, ' ', p.player_lname) as player_name, gi.injury_type, gi.games_missed FROM Games_Injured gi INNER JOIN Seasons s ON gi.season_id = s.season_id INNER JOIN Players p ON gi.player_id = p.player_id"; 
+        let query2 = "select * from Seasons";
+        let query3 = "select * from Players";
+
+        try {
+                db.pool.query(query1, function(error, rows, fields){
+                    return firstData = rows;
+                });
                 
-        //         db.pool.query(query3, function(error, rows, fields){
-            
-        //             let seasons = rows;
-        //             let int = {data: {injuries, players, seasons}};
-        //             console.log(int.data.injuries[0].injury_id);
-        //             // return res.render('injuries', {data: injuries, players: players, seasons: seasons});
-        //             return res.render('injuries', {data: [injuries, players, seasons]});
+                db.pool.query(query2, function(error, rows, fields){
+                    return secData = rows
+                });
+                db.pool.query(query3, function(error, rows, fields){
+                    let thirdData = rows;
                     
+                    res.render('injuries', {data: firstData, secData, thirdData});
+                });
                 
-        //     })
             
-        // })
-
-        let query1 = "select * from Games_Injured;"; 
-        
-        db.pool.query(query1, function(error, rows, fields){
-            
-            res.render('injuries', {data: rows});
-            
-        })
-
-        
-    });  
-
-    });
+        } catch (error) {
+            return error;
+        }
+             
+        });  
 
 app.get('/teams', function (req, res)
     {
@@ -244,6 +267,7 @@ app.post('/add-injury-ajax', function(req, res)
              })
          }
      })
+    });
 
 app.post('/add-team-ajax', function(req, res)
 {

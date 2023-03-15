@@ -1,14 +1,20 @@
 <!-- index.hbs -->
 <head> 
-    {{#each css}}
-        <link rel="stylesheet" href="/css/{{this}}">
-    {{/each}}
+        <link href="css/style.css" rel="stylesheet" type="text/css">
 </head>
 <h1>Team Canuck</h1>
 
-<a href="/">Home</a> | <a href="/seasons">Seasons</a> | <a href="/players">Players</a> | <a href="/injuries">Injury Report</a> | <a href="/teams">Teams</a>
+<div class="nav-bar">
+    <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/players">Players</a></li>
+    <li><a href="/teams">Teams</a></li>
+    <li><a href="/injuries">Injury Report</a></li>
+    <li><a href="/seasons">Seasons</a></li>
+    </ul>
+</div>
 
-<table border="1" cellpadding="5" id="player-table">
+<table id="player-table">
 
     {{!-- Header section --}}
     <thead>
@@ -46,49 +52,51 @@
 </table>
 
 <!-- Add Player Form-->
-    <form id="add-player-form-ajax">
+    <form id="add-player-form-ajax" class="add-form">
             <legend>Add Player</legend>
+            <ul>
             <fieldset class="fields">
-                <label>First Name</label>
-                <input type="text" name="fname" id="input-fname">
-                <label>Last Name</label>
-                <input type="text" name="lname" id="input-lname">
-                <label>Weight</label>
-                <input type="text" name="weight" id="input-weight">
-                <label>Height</label>
-                <input type="text" name="height" id="input-height">
-                <label>Date of Birth</label>
-                <input type="date" name="dob" value="2000-12-31" id="input-dob">
-                <label for="position">Position:</label>
-                <select name="position" id="input-position">
+                <li><input type="text" name="fname" id="input-fname" placeholder="First Name"></li>
+                
+                <li><input type="text" name="lname" id="input-lname" placeholder="Last Name"></li>
+                
+                <li><input type="number" name="weight" id="input-weight" placeholder="Weight"></li>
+                
+                <li><input type="number" name="height" id="input-height" placeholder="Height"></li>
+                
+                <li><input type="date" name="dob" value="2000-12-31" id="input-dob"></li>
+                
+                <li><select name="position" id="input-position" aria-placeholder="Select Position">
                 <option value="C">C</option>
                 <option value="RW">RW</option>
                 <option value="LW">LW</option>
                 <option value="RD">RD</option>
                 <option value="LD">LD</option>
-                </select>
+                </select></li>
+                
             </fieldset>
+            </ul>
             <input class="btn" type="submit" value="Add">
         </form>
 
 <!-- Update Player Form-->
 
-    <h4>Update Player</h4>
-    <form id="update-player-form-ajax">
-    <label for="input-fullname">Full name: </label>
-    <select name="input-fullname" id="mySelect">
-        <option value="test">Select a Person</option>
+    
+    <form id="update-player-form-ajax" class="add-form">
+    <legend>Update Player</legend>
+    <fieldset class="fields">
+    <ul>
+    
+    <select name="input-fullname" id="mySelect" onchange="sendID(document.getElementById('mySelect').value)" required>
+        <option value="test">Select a Player</option>
         {{#each data}}
         <option value="{{this.player_id}}">{{this.player_id}} : {{this.player_fname}} {{this.player_lname}}</option>
         {{/each}}
     </select>
-    <label for="input-weight">Weight: </label>
-    <input type="number" name="weight" id="input-weight-update">
-    <label for="input-height">Height: </label>
-    <input type="number" name="height" id="input-height-update">
-    <label for="input-dob">Date of Birth: </label>
-    <input type="date" name="dob" id="input-dob-update">
-    <label for="input-position">Position </label>
+    
+    <li><input type="number" name="weight" id="input-weight-update" placeholder="Weight"></li>
+    <li><input type="number" name="height" id="input-height-update" placeholder="Height"></li>
+    <li><input type="date" name="dob" id="input-dob-update" placeholder=""></li>
     <select name="position" id="input-position-update">
                 <option value="C">C</option>
                 <option value="RW">RW</option>
@@ -96,6 +104,8 @@
                 <option value="RD">RD</option>
                 <option value="LD">LD</option>
     </select>
+    </fieldset>
+    </ul>
     <input type="submit">
 
 </form>
@@ -103,5 +113,6 @@
 
 {{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
 <script src="./js/add_player.js"></script>
+<script src="./js/fill_player.js"></script>
 <script src="./js/update_player.js"></script>
 <script src="./js/delete_player.js"></script>
