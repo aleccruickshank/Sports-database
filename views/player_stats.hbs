@@ -1,10 +1,18 @@
 <head> 
-    {{#each css}}
-        <link rel="stylesheet" href="/css/{{this}}">
-    {{/each}}
+        <link href="css/style.css" rel="stylesheet" type="text/css">
 </head>
 <h1>Team Canuck</h1>
-<a href="/">Home</a> | <a href="/seasons">Seasons</a> | <a href="/players">Players</a> | <a href="/injuries">Injury Report</a> | <a href="/player-stats">Player Stats</a>
+
+<div class="nav-bar">
+    <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/players">Players</a></li>
+    <li><a href="/player_stats">Player Statistics</a></li>
+    <li><a href="/teams">Teams</a></li>
+    <li><a href="/injuries">Injury Report</a></li>
+    <li><a href="/seasons">Seasons</a></li>
+    </ul>
+</div>
 
 {{!-- Create a table --}}
 <table border="1" cellpadding="5" id="player-stats-table">
@@ -26,12 +34,12 @@
 
     {{!-- Body section --}}
     <tbody>
-        {{#each data}}
+        {{#each secData}}
         <tr>
             <td>{{this.stats_id}}</td>
-            <td>{{this.team_id}}</td>
-            <td>{{this.season_id}}</td>
-            <td>{{this.player_id}}</td>
+            <td>{{this.team_name}}</td>
+            <td>{{this.season_year}}</td>
+            <td>{{this.player_name}}</td>
             <td>{{this.goals}}</td>
             <td>{{this.assists}}</td>
             <td>{{this.points}}</td>
@@ -42,56 +50,95 @@
     </tbody>
 </table>
 
-<!-- Add Season Form-->
-    <form id="add-injury-form-ajax">
+<!-- Add Player Statistics Form-->
+    <form id="add-player-stats-form-ajax" class="add-form">
             <legend>Add Player Statistics</legend>
             <fieldset class="fields">
-                <label>Team: </label>
-                <input type="number" name="team" id="input-team">
-                <label>Year: </label>
-                <input type="number" name="year" id="input-year">
-                <label>Player: </label>
-                <input type="number" name="player" id="input-player">
-                <label>Goals: </label>
-                <input type="number" name="goals" id="input-goals">
-                <label>Assists: </label>
-                <input type="number" name="assists" id="input-assists">
-                <label>Points: </label>
-                <input type="number" name="points" id="input-points">
-                <label>Games Played: </label>
-                <input type="number" name="games-played" id="input-games-played">
+                <ul>
+                <li>
+                <select name="input-team" id="input-team">
+                <option value="" disabled selected>Select A Team</option>
+                {{#each teamData}}
+                <option value="{{this.team_id}}">{{this.team_name}}</option>
+                {{/each}}
+                </select>
+                </li>
+                <li>
+                <select name="input-year" id="input-year">
+                <option value="" disabled selected>Select A Year</option>
+                {{#each seasonData}}
+                <option value="{{this.season_id}}">{{this.season_year}}</option>
+                {{/each}}
+                </select>
+                </li>
+                <li>
+                <select name="input-player" id="input-player">
+                <option value="" disabled selected>Select A Player</option>
+                {{#each playerData}}
+                <option value="{{this.player_id}}">{{this.player_id}}: {{this.player_fname}} {{this.player_lname}}</option>
+                {{/each}}
+                </select>
+                </li>
+                {{!-- <li><input type="number" name="team" id="input-team" placeholder="Team Name"></li>
+                <li><input type="number" name="year" id="input-year" placeholder="Year"></li>
+                <li><input type="number" name="player" id="input-player" placeholder="Player"></li> --}}
+                <li><input type="number" name="goals" id="input-goals" placeholder="Goals"></li>
+                <li><input type="number" name="assists" id="input-assists" placeholder="Assists"></li>
+                <li><input type="number" name="points" id="input-points" placeholder="Points"></li>
+                <li><input type="number" name="games-played" id="input-games-played" placeholder="Games Played"></li>
+                </ul>
             </fieldset>
             <input class="btn" type="submit" value="Add">
         </form>
 
 <!-- Update Player Form-->
 
-    <h4>Update Player Statistics</h4>
-    <form id="update-player-stats-form-ajax">
-    <label for="input-stats">Stats ID: </label>
-    <select name="input-stats" id="mySelect">
-        <option value="test">Select a Statistic</option>
-        {{#each data}}
-        <option value="{{this.stats_id}}">{{this.team_id}} - {{this.season_id}} - {{this.player_id}} : {{this.goals}} {{this.assists}} {{this.points}} {{this.games_played}}</option>
+    <form id="update-player-stats-form-ajax" class="add-form">
+    <legend>Update Player Statistics</legend>
+    <fieldset class="fields">
+    <ul>
+    <li>
+        <select name="input-stats" id="mySelect" onchange="sendID(document.getElementById('mySelect').value)" required>
+        <option value="" disabled selected>Select A Statistic</option>
+        {{#each secData}}
+        <option value="{{this.stats_id}}">{{this.stats_id}} - {{this.player_name}}: {{this.season_year}}</option>
         {{/each}}
     </select>
-    <label>Team: </label>
-    <input type="number" name="team" id="input-team-update">
-    <label>Year: </label>
-    <input type="number" name="year" id="input-year-update">
-    <label>Player: </label>
-    <input type="number" name="player" id="input-player-update">
-    <label>Goals: </label>
-    <input type="number" name="goals" id="input-goals-update">
-    <label>Assists: </label>
-    <input type="number" name="assists" id="input-assists-update">
-    <label>Points: </label>
-    <input type="number" name="points" id="input-points-update">
-    <label>Games Played: </label>
-    <input type="number" name="games-played" id="input-games-played-update">
+    </li>
+    <li>
+        <select name="input-team-update" id="input-team-update">
+        <option value="" disabled selected>Select A Team</option>
+        {{#each secData}}
+        <option value="{{this.team_id}}">{{this.team_name}}</option>
+        {{/each}}
+    </select>
+    </li>
+    <li>
+        <select name="input-year-update" id="input-year-update">
+        <option value="" disabled selected>Select A Year</option>
+        {{#each secData}}
+        <option value="{{this.season_id}}">{{this.season_year}}</option>
+        {{/each}}
+    </select>
+    </li>
+    <li>
+        <select name="input-player-update" id="input-player-update">
+        <option value="" disabled selected>Select A Player</option>
+        {{#each secData}}
+        <option value="{{this.player_id}}">{{this.player_name}}</option>
+        {{/each}}
+    </select>
+    </li>
+    <li><input type="number" name="goals" id="input-goals-update" placeholder="Goals"></li>
+    <li><input type="number" name="assists" id="input-assists-update" placeholder="Asissts"></li>
+    <li><input type="number" name="points" id="input-points-update" placeholder="Points"></li>
+    <li><input type="number" name="games-played" id="input-games-played-update" placeholder="Games Played"></li>
+    </ul>
+    </fieldset>
     <input type="submit">
     </form>
 
 <script src="./js/add_player_stats.js"></script>
+<script src="./js/fill_player_stats.js"></script>
 <script src="./js/delete_player_stats.js"></script>
 <script src="./js/update_player_stats.js"></script>

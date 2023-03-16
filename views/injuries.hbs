@@ -7,6 +7,7 @@
     <ul>
     <li><a href="/">Home</a></li>
     <li><a href="/players">Players</a></li>
+    <li><a href="/player_stats">Player Statistics</a></li>
     <li><a href="/teams">Teams</a></li>
     <li><a href="/injuries">Injury Report</a></li>
     <li><a href="/seasons">Seasons</a></li>
@@ -48,29 +49,19 @@
 </table>
 
 <!-- Add Injury Form-->
-    {{!-- <form id="add-injury-form-ajax" class="add-form">
-            <legend>Add Injury Report</legend>
-            <ul>
-            <fieldset class="fields">
-                <li><input type="number" name="year" id="input-year" placeholder="Year"></li>
-                <li><input type="number" name="player" id="input-player" placeholder="Player"></li>
-                <li><input type="number" name="games-missed" id="input-games-missed" placeholder="Games Missed"></li>
-                <li><input type="text" name="injury" id="input-injury" placeholder="Describe Injury"></li>
-            </fieldset>
-            </ul>
-            <input class="btn" type="submit" value="Add">
-        </form> --}}
 
     <form id="add-injury-form-ajax" class="add-form">
             <legend>Add Injury Report</legend>
             <ul>
             <fieldset class="fields">
                 <select name="input-year" id="input-year" required>
+                <option value="" disabled selected>Select A Year</option>
                 {{#each secData}}
                 <option value="{{this.season_id}}">{{this.season_year}}</option>
                 {{/each}}
                 </select>
                 <select name="input-player" id="input-player" required>
+                <option value="" disabled selected>Select A Player</option>
                 {{#each thirdData}}
                 <option value="{{this.player_id}}">{{this.player_fname}} {{this.player_lname}}: {{this.player_id}}</option>
                 {{/each}}
@@ -90,13 +81,13 @@
     <ul>
     <fieldset class="fields">
     <select name="input-injury" id="mySelect" onchange="sendID(document.getElementById('mySelect').value)" required>
-        <option value="test">Select an Injury</option>
+        <option value="" disabled selected>Select An Injury</option>
         {{#each data}}
         <option value="{{this.injury_id}}">{{this.player_name}} - Injury ID: {{this.injury_id}}</option>
         {{/each}}
     </select>
     <select name="input-injury" id="input-year-update" required>
-        <option value="test">Select an Injury</option>
+        <option value="" disabled selected>Select a year</option>
         {{#each secData}}
         <option value="{{this.season_id}}">{{this.season_year}}</option>
         {{/each}}

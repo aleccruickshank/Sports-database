@@ -90,6 +90,21 @@ app.get('/fill-injury-ajax', function(req, res)
         })
     });
 
+app.get('/fill-player-stats-ajax', function(req, res)
+    {
+        let data = req.query;
+        
+        let stats_id = parseInt(data.stats_id)
+       
+        let query1 = "select * from Player_Stats where stats_id = ?;"
+        
+        db.pool.query(query1, [stats_id], function(error, rows, fields){
+            
+            res.send(rows);
+            
+        })
+    });
+
 
 app.get('/seasons', function(req, res)
     {
@@ -141,13 +156,43 @@ app.get('/teams', function (req, res)
         })
     });
 
-app.get('/player-stats', function (req, res)
+app.get('/player_stats', async (req, res) =>
 {
     let query1 = "select * from Player_Stats;";
+    let query2 = "SELECT t.team_id, t.team_name, ps.stats_id, p.player_id, s.season_year, s.season_id, CONCAT(p.player_fname, ' ', p.player_lname) as player_name, ps.goals, ps.assists, ps.points, ps.games_played FROM Player_Stats ps INNER JOIN Seasons s ON ps.season_id = s.season_id INNER JOIN Players p ON ps.player_id = p.player_id INNER JOIN Teams t ON ps.team_id = t.team_id"; 
+    let query3 = "select * from Players;"
+    let query4 = "select * from Seasons;"
+    let query5 = "select * from Teams;"
 
+    try {
     db.pool.query(query1, function (error, rows, fields) {
-        res.render('player_stats', {data: rows});
+        return firstData = rows
     })
+
+    db.pool.query(query2, function (error, rows, fields) {
+        return secData = rows
+        
+    })
+    
+    db.pool.query(query3, function (error, rows, fields) {
+        return playerData = rows
+            
+    })
+
+    db.pool.query(query4, function (error, rows, fields) {
+        return seasonData = rows
+                
+    })
+
+    db.pool.query(query5, function (error, rows, fields) {
+        let teamData = rows
+                
+        res.render('player_stats', {data: firstData, secData, playerData, seasonData, teamData});
+    })
+
+    } catch (error) {
+            return error
+    }
 });
     
 app.post('/add-player-ajax', function(req, res)
@@ -361,7 +406,7 @@ app.post('/add-player-stats-ajax', function(req, res)
             })
         }
     });
-
+});
 
 app.delete('/delete-player-ajax/', function(req,res,next){
     let data = req.body;
@@ -488,8 +533,7 @@ app.delete('/delete-team-ajax/', function(req,res,next){
 app.delete('/delete-player-stats-ajax/', function(req,res,next){
     let data = req.body;
     let stats_id = parseInt(data.id);
-    let delete_PlayerStats = `DELETE FROM Player_Stats WHERE status_id = ?`;
-    // might need to delete from other tables too
+    let delete_PlayerStats = `DELETE FROM Player_Stats WHERE stats_id = ?`;
 
     // Run the 1st query
     db.pool.query(delete_PlayerStats, [stats_id], function(error, rows, fields){
