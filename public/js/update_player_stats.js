@@ -1,5 +1,5 @@
 // Get the objects we need to modify
-let updatePlayerForm = document.getElementById('update-injury-form-ajax');
+let updatePlayerForm = document.getElementById('update-player-stats-form-ajax');
 
 // Modify the objects we need
 updatePlayerForm.addEventListener("submit", function (e) {

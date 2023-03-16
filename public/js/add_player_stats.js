@@ -33,7 +33,7 @@ addPersonForm.addEventListener("submit", function (e) {
         goals: goalsValue,
         assists: assistsValue,
         points: pointsValue,
-        games_missed: gamesPlayedValue
+        games_played: gamesPlayedValue
     }
 
     // Setup our AJAX request
