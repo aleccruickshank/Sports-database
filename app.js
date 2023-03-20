@@ -9,7 +9,7 @@ var app = express();
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(express.static('public'))
-PORT = 61522;
+PORT = 55234;
 
 // Handlebars
 const { engine } = require('express-handlebars');
@@ -105,6 +105,20 @@ app.get('/fill-player-stats-ajax', function(req, res)
         })
     });
 
+app.get('/fill-standings-ajax', function(req, res)
+    {
+        let data = req.query;
+        
+        let standings_id = parseInt(data.standings_id)
+       
+        let query1 = "select * from Standings where standings_id = ?;"
+        
+        db.pool.query(query1, [standings_id], function(error, rows, fields){
+            
+            res.send(rows);
+            
+        })
+    });
 
 app.get('/seasons', function(req, res)
     {
@@ -145,6 +159,62 @@ app.get('/injuries', async (req, res) => {
             return error;
         }
              
+        });
+
+app.get('/injuries', async (req, res) => {
+        
+        let query1 = "SELECT gi.injury_id, p.player_id, s.season_year, s.season_id, CONCAT(p.player_fname, ' ', p.player_lname) as player_name, gi.injury_type, gi.games_missed FROM Games_Injured gi INNER JOIN Seasons s ON gi.season_id = s.season_id INNER JOIN Players p ON gi.player_id = p.player_id"; 
+        let query2 = "select * from Seasons";
+        let query3 = "select * from Players";
+
+        try {
+                db.pool.query(query1, function(error, rows, fields){
+                    return firstData = rows;
+                });
+                
+                db.pool.query(query2, function(error, rows, fields){
+                    return secData = rows
+                });
+                db.pool.query(query3, function(error, rows, fields){
+                    let thirdData = rows;
+                    
+                    res.render('injuries', {data: firstData, secData, thirdData});
+                });
+                
+            
+        } catch (error) {
+            return error;
+        }
+             
+        });  
+
+ app.get('/standings', async (req, res) => {
+        
+        let query1 = "SELECT t.team_id, t.team_name, st.standings_id, s.season_id, s.season_year, st.wins, st.losses, st.points, st.ot FROM Standings st INNER JOIN Seasons s ON st.season_id = s.season_id INNER JOIN Teams t ON st.team_id = t.team_id";  
+        let query2 = "select * from Seasons";
+        let query3 = "select * from Teams";
+    
+        try {
+                db.pool.query(query1, function(error, rows, fields){
+                    
+                    return standingsData = rows;
+                });
+                    
+                db.pool.query(query2, function(error, rows, fields){
+                    return seasonData = rows
+                });
+
+                db.pool.query(query3, function(error, rows, fields){
+                    let teamData = rows;
+                    
+                    res.render('standings', {data: standingsData, seasonData, teamData});
+                });
+                    
+                
+        } catch (error) {
+            return error;
+        }
+                 
         });  
 
 app.get('/teams', function (req, res)
@@ -408,6 +478,47 @@ app.post('/add-player-stats-ajax', function(req, res)
     });
 });
 
+app.post('/add-standings-ajax', function(req, res)
+{
+    // Capture the incoming data and parse it back to a JS object
+    let data = req.body;
+
+    // Create the query and run it on the database
+    query1 = `INSERT INTO Standings (team_id, season_id, wins, losses, ot, points) 
+ VALUES (${data.team_id}, ${data.season_id}, ${data.wins}, ${data.losses}, ${data.ot}, ${data.points})`;
+
+    db.pool.query(query1, function(error, rows, fields){
+
+        // Check to see if there was an error
+        if (error) {
+
+            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+            console.log(error)
+            res.sendStatus(400);
+        }
+        else
+        {
+            // If there was no error, perform a SELECT * on Standings
+            query2 = `SELECT * FROM Standings;`;
+            db.pool.query(query2, function(error, rows, fields){
+
+                // If there was an error on the second query, send a 400
+                if (error) {
+
+                    // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+                    console.log(error);
+                    res.sendStatus(400);
+                }
+                // If all went well, send the results of the query back.
+                else
+                {
+                    res.send(rows);
+                }
+            })
+        }
+    });
+});
+
 app.delete('/delete-player-ajax/', function(req,res,next){
     let data = req.body;
     let player_id = parseInt(data.id);
@@ -548,6 +659,36 @@ app.delete('/delete-player-stats-ajax/', function(req,res,next){
         {
             // Run the second query
             db.pool.query(delete_PlayerStats, [stats_id], function(error, rows, fields) {
+
+                if (error) {
+                    console.log(error);
+                    res.sendStatus(400);
+                } else {
+                    res.sendStatus(204);
+                }
+            })
+        }
+    })
+});
+
+app.delete('/delete-standings-ajax/', function(req,res,next){
+    let data = req.body;
+    let standings_id = parseInt(data.id);
+    let delete_Standings = `DELETE FROM Standings WHERE standings_id = ?`;
+
+    // Run the 1st query
+    db.pool.query(delete_Standings, [standings_id], function(error, rows, fields){
+        if (error) {
+
+            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+            console.log(error);
+            res.sendStatus(400);
+        }
+
+        else
+        {
+            // Run the second query
+            db.pool.query(delete_Standings, [standings_id], function(error, rows, fields) {
 
                 if (error) {
                     console.log(error);
@@ -750,6 +891,48 @@ app.put('/put-player-stats-ajax', function(req,res,next){
         }
     })
 });
+
+app.put('/put-standings-ajax', function(req,res,next){
+    let data = req.body;
+
+    let standings_id = parseInt(data.standings_id);
+    let team_id = parseInt(data.team_id);
+    let season_id = parseInt(data.season_id);
+    let wins = parseInt(data.wins);
+    let losses = parseInt(data.losses);
+    let ot = parseInt(data.ot);
+    let points = parseInt(data.points);
+
+    let queryUpdateStandings = `UPDATE Standings SET team_id = ?, season_id = ?, wins = ?, losses = ?, ot = ?, points = ? WHERE standings_id = ?`;
+    let selectStandings = `SELECT * FROM Standings WHERE standings_id = ?`
+
+    // Run the 1st query
+    db.pool.query(queryUpdateStandings, [team_id, season_id, wins, losses, ot, points, standings_id], function(error, rows, fields){
+        if (error) {
+
+            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+            console.log(error);
+            res.sendStatus(400);
+        }
+
+            // If there was no error, we run our second query and return that data so we can use it to update the people's
+        // table on the front-end
+        else
+        {   
+            // Run the second query
+            db.pool.query(selectStandings, [standings_id], function(error, rows, fields) {
+
+                if (error) {
+                    console.log(error);
+                    res.sendStatus(400);
+                } else {
+                    res.send(rows);
+                }
+            })
+        }
+    })
+});
+
 
 
 /*

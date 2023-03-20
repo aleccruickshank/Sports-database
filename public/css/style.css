@@ -82,7 +82,7 @@ tbody tr:hover {
 
 .add-form legend {
     font-weight: bold;
-    color: #4441ee;;
+    color: #4441ee;
 }
 
 .add-form input[type=submit] {
@@ -135,3 +135,22 @@ button {
     width:100%;
   
   }
+
+h1#project-title {
+    margin-left: 5px;
+    font-weight: bold;
+    color: #4441ee;
+}
+
+h1#project-team {
+    margin-left: 5px;
+}
+
+.title {
+    display: flex;
+}
+
+strong {
+    color: #4441ee;
+    text-decoration: underline;
+}
