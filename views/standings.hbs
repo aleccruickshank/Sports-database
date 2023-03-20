@@ -1,0 +1,127 @@
+<head>
+        <link href="css/style.css" rel="stylesheet" type="text/css">
+</head>
+
+<div class="nav-bar">
+    <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/players">Players</a></li>
+    <li><a href="/player_stats">Player Statistics</a></li>
+    <li><a href="/teams">Teams</a></li>
+    <li><a href="/injuries">Injury Report</a></li>
+    <li><a href="/standings">Standings</a></li>
+    <li><a href="/seasons">Seasons</a></li>
+    </ul>
+</div>
+
+{{!-- Create a table --}}
+<table id="standings-table">
+
+    {{!-- Header section --}}
+    <thead>
+    <tr>
+        <th>Standings ID</th>
+        <th>Team Name</th>
+        <th>Season</th>
+        <th>Wins</th>
+        <th>Losses</th>
+        <th>OT</th>
+        <th>Points</th>
+        <th>Delete</th>
+    <tr>
+
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+    {{!-- For each row --}}
+    {{#each data}}
+        <tr>
+            <td>{{this.standings_id}}</td>
+            <td>{{this.team_name}}</td>
+            <td>{{this.season_year}}</td>
+            <td>{{this.wins}}</td>
+            <td>{{this.losses}}</td>
+            <td>{{this.ot}}</td>
+            <td>{{this.points}}</td>
+            <td><button onclick="deleteStandings({{this.standings_id}})">Delete</button></td>
+        </tr>
+    {{/each}}
+    </tbody>
+</table>
+
+<!-- Add Team Form-->
+<form id="add-standings-form-ajax" class="add-form">
+    <legend>Add Record</legend>
+    <fieldset class="fields">
+        <ul>
+            <li>
+                <select name="input-team" id="input-team">
+                <option value="" disabled selected>Select a Team</option>
+                {{#each teamData}}
+                <option value="{{this.team_id}}">{{this.team_name}}</option>
+                {{/each}}
+                </select>
+            </li>
+            <li>
+                <select name="input-year" id="input-year">
+                <option value="" disabled selected>Select a Year</option>
+                {{#each seasonData}}
+                <option value="{{this.season_id}}">{{this.season_year}}</option>
+                {{/each}}
+                </select>
+            </li>
+            <li><input type="number" name="wins" id="input-wins" placeholder="Wins"></li>
+            <li><input type="number" name="losses" id="input-losses" placeholder="Losses"></li>
+            <li><input type="number" name="ot" id="input-ot" placeholder="OT"></li>
+            <li><input type="number" name="points" id="input-points" placeholder="Points"></li>
+        </ul>
+    </fieldset>
+    <input class="btn" type="submit" value="Add">
+</form>
+
+<!-- Update Team Form-->
+<form id="update-standings-form-ajax" class="add-form">
+    <legend>Update Record</legend>
+    <fieldset class="fields">
+    <ul>
+    <li>
+        <select name="input-standings" id="mySelect" onchange="sendID(document.getElementById('mySelect').value)" required>
+        <option value="" disabled selected>Select a Record</option>
+        {{#each data}}
+        <option value="{{this.standings_id}}">{{this.team_name}}: {{this.season_year}}</option>
+        {{/each}}
+    </select>
+    </li>
+    <li>
+        <select name="input-team-update" id="input-team-update">
+        <option value="" disabled selected>Select a Team</option>
+        {{#each teamData}}
+        <option value="{{this.team_id}}">{{this.team_name}}</option>
+        {{/each}}
+    </select>
+    </li>
+    <li>
+        <select name="input-year-update" id="input-year-update">
+        <option value="" disabled selected>Select a Year</option>
+        {{#each seasonData}}
+        <option value="{{this.season_id}}">{{this.season_year}}</option>
+        {{/each}}
+    </select>
+    </li>
+    <li><input type="number" name="wins" id="input-wins-update" placeholder="Wins"></li>
+    <li><input type="number" name="losses" id="input-losses-update" placeholder="Losses"></li>
+    <li><input type="number" name="ot" id="input-ot-update" placeholder="OT"></li>
+    <li><input type="number" name="points" id="input-points-update" placeholder="Points"></li>
+    </ul>
+    </fieldset>
+    <input type="submit">
+    
+</form>
+
+
+<script src="./js/add_standings.js"></script>
+<script src="./js/fill_standings.js"></script>
+<script src="./js/update_standings.js"></script>
+<script src="./js/delete_standings.js"></script>
