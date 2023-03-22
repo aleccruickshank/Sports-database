@@ -1,1 +1,1 @@
-# 340-project
+# NHL-Statisical-Database
