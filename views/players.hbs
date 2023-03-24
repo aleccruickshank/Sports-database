@@ -36,7 +36,7 @@
     {{!-- Body section --}}
     <tbody>
 
-        {{!-- For each row, print the id, fname, lname, homeworld and age, in order --}}
+        {{!-- For each row, print the id, name, stats --}}
         {{#each data}}
         <tr>
             <td>{{this.player_id}}</td>
@@ -81,8 +81,6 @@
         </form>
 
 <!-- Update Player Form-->
-
-    
     <form id="update-player-form-ajax" class="add-form">
     <legend>Update Player</legend>
     <fieldset class="fields">

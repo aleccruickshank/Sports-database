@@ -866,7 +866,7 @@ app.put('/put-player-stats-ajax', function(req,res,next){
     let selectPlayerStats = `SELECT * FROM Player_Stats WHERE stats_id = ?`
 
     // Run the 1st query
-    db.pool.query(queryUpdatePlayerStats, [team_id, season_id, player_id, goals, assists, points, games_played], function(error, rows, fields){
+    db.pool.query(queryUpdatePlayerStats, [team_id, season_id, player_id, goals, assists, points, games_played, stats_id], function(error, rows, fields){
         if (error) {
 
             // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
